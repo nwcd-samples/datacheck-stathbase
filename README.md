@@ -25,7 +25,7 @@ enable 'your-table-name'
 
 运行
 ```shell
-java -jar stathbase-0.0.1-jar-with-dependencies.jar
+java -jar stathbase-0.0.1-jar-with-dependencies.jar your-table-name
 ```
 
 ## 注意
