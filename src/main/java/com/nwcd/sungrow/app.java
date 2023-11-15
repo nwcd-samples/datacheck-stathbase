@@ -14,7 +14,7 @@ public class app {
 
     public static void main(String[] args) {
         try {
-            String strTb = args[1];
+            String strTb = args[0];
             // 配置
             Configuration conf = HBaseConfiguration.create();
 
