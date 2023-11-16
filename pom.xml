@@ -40,6 +40,12 @@
             <version>1.4.9</version>
             <scope>${library.scope}</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version> <!-- 或者使用最新版本 -->
+        </dependency>
     </dependencies>
     <build>
         <plugins>
