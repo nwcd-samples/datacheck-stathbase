@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import org.apache.hadoop.hbase.HConstants;
 
 import org.json.JSONObject;
 
@@ -43,18 +44,16 @@ public class app {
             String column = jsonObject.getString("column");
             System.out.println("set column: " + column);
 
-            String from = "";
-            String to = "";
-
-            if (cmd.equals("count")) {
-                from = jsonObject.getString("from");
-                to = jsonObject.getString("to");
-                System.out.println("here from: " + from);
-            }
+            String from = jsonObject.getString("from");
+            String to = jsonObject.getString("to");
+            System.out.println("to: " + from);
+            System.out.println("to: " + to);
 
             // 配置
             Configuration conf = HBaseConfiguration.create();
-            System.out.println(String.valueOf(conf));
+            conf.setInt("hbase.client.operation.timeout", 60000000); // 操作超时时间，单位毫秒
+            conf.setInt("hbase.client.scanner.timeout.period", 60000000); // 扫描超时时间，单位毫秒
+            conf.setInt("hbase.client.retries.number", 3); // 重试次数
 
             // 创建 AggregationClient
             AggregationClient aggregationClient = new AggregationClient(conf);
@@ -71,7 +70,7 @@ public class app {
                 System.out.println("Total endTime: " + endTime);
                 scan.setTimeRange(startTime, endTime);
             }
-
+            // scan.setTimeRange(1700016800000L, 1700016872379L);
             // 列解释器，用于指定聚合操作的列类型
             LongColumnInterpreter columnInterpreter = new LongColumnInterpreter();
 
@@ -105,9 +104,8 @@ public class app {
     private static long getTimeStamp(String dateString) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sdf.setTimeZone(TimeZone.getTimeZone("UTC+8"));
             Date date = sdf.parse(dateString);
-            return date.getTime();
+            return date.getTime() - 8 * 60 * 60 * 1000;
         } catch (Exception e) {
             throw new RuntimeException("Error parsing date: " + dateString, e);
         }

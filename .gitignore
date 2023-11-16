@@ -1,1 +1,3 @@
 /target/
+ec2-global-media.pem
+.gitignore
